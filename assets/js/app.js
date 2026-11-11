@@ -130,6 +130,12 @@
     } else {
       document.title = p.name + " | Sri Seafood";
       var md = $('meta[name="description"]'); if (md) md.setAttribute("content", p.description);
+      /* Give each product its own address for Google */
+      var canon = "https://sriseafood.co.uk/product?id=" + p.id;
+      var cl = $('link[rel="canonical"]'); if (cl) cl.setAttribute("href", canon);
+      var ogu = $('meta[property="og:url"]'); if (ogu) ogu.setAttribute("content", canon);
+      var ogt = $('meta[property="og:title"]'); if (ogt) ogt.setAttribute("content", p.name + " | Sri Seafood");
+      var ogd = $('meta[property="og:description"]'); if (ogd) ogd.setAttribute("content", p.description);
       var step = stepOf(p); var sel = { cut: p.cuts.length ? p.cuts[0] : "", qty: 1 };
       var canBuy = p.inStock && p.price != null;
       var buyBtns = "";
