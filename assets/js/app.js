@@ -155,10 +155,10 @@
         '<div class="opt-group"><span class="label">Quantity' + (p.unit === "kg" ? " (minimum 500g)" : "") + '</span><div class="qty"><button data-q="-1" aria-label="Decrease">−</button><output id="pdp-qty">' + fmtQty(1, p) + '</output><button data-q="1" aria-label="Increase">+</button></div></div>' +
         '<div class="opt-group"><label class="label" for="pdp-note">Special requests <span style="font-weight:500;color:var(--muted)">(optional)</span></label><textarea id="pdp-note" class="textarea" maxlength="500" placeholder="e.g. head on, medium pieces, skin removed…" style="min-height:84px"></textarea></div>' +
         buyBtns +
-        '<p class="pdp-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>Priced per ' + esc(p.unit) + '. Fresh fish varies naturally in size, so we confirm the final weight and price with you before delivery. Head and tail included unless you ask otherwise.</p>' +
-        '<div class="acc"><details open><summary>Freshness &amp; packing</summary><p>Selected from trusted suppliers, prepared to your chosen cut, vacuum-packed and delivered in an insulated cool box with ice. Keep refrigerated and enjoy within 1–2 days, or freeze on arrival.</p></details>' +
-        "<details><summary>Delivery</summary><p>Our regular fresh drop is every <b>Saturday</b> across " + esc(B.deliveryArea) + "; Tuesday delivery is subject to availability. Orders close at 7pm the day before. Free delivery on orders over " + money(CFG.delivery.freeOver) + '. <a class="link-arrow" href="delivery.html">Delivery details</a></p></details>' +
-        "<details><summary>Payment</summary><p>Pay by card, cash or bank transfer. We check every item before it leaves us.</p></details></div></div>";
+        '<p class="pdp-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>Priced per ' + esc(p.unit) + ' on the fish\'s whole weight — we then clean and cut it to your choice. Head and tail included unless you ask otherwise.</p>' +
+        '<div class="acc"><details open><summary>Freshness &amp; packing</summary><p>Selected from trusted suppliers, prepared to your chosen cut, vacuum-packed and delivered in an insulated cool box with ice. Every item is checked before it leaves us. Keep refrigerated and enjoy within 1–2 days, or freeze on arrival.</p></details>' +
+        "<details><summary>Delivery</summary><p>Our regular fresh drop is every <b>Saturday</b> across " + esc(B.deliveryArea) + "; Tuesday delivery is subject to availability. Orders close at 7pm the day before. Free delivery on orders over £" + CFG.delivery.freeOver + '; for smaller orders, we&#39;ll confirm the delivery charge on WhatsApp. <a class="link-arrow" href="delivery.html">Delivery details</a></p></details>' +
+        "<details><summary>Payment</summary><p>Pay by card, cash or bank transfer.</p></details></div></div>";
 
       var qtyOut = $("#pdp-qty");
       var updWa = function () { var a = $("#pdp-wa"); if (a) a.href = waProduct(p, sel.cut, sel.qty, $("#pdp-note").value.trim()); };
@@ -274,13 +274,13 @@
         '<input class="input" name="postcode" placeholder="Delivery postcode" autocomplete="postal-code" required>' +
         '<select class="select" name="slot" aria-label="Preferred delivery">' + slotOptions() + "<option>Next available slot</option></select></form>" +
         '<button class="btn btn--wa btn--block" form="wa-form" type="submit">' + I.wa + " Send order on WhatsApp</button>" +
-        '<p class="small-print">No payment now — we\'ll confirm weights, total and delivery time on WhatsApp.</p>' +
+        '<p class="small-print">No payment now — we confirm every order personally on WhatsApp, to make sure we get everything just right for you.</p>' +
         '<button type="button" class="link-btn" id="alt-toggle" aria-expanded="false">No WhatsApp? Send your order by email instead</button>' +
         '<form class="checkout-form alt-form" id="alt-form" hidden>' +
         '<input class="input" type="tel" name="phone" placeholder="Phone number" autocomplete="tel" required>' +
         '<input class="input" type="email" name="email" placeholder="Email address" autocomplete="email" required>' +
         '<button class="btn btn--primary btn--block" type="submit">Send order</button>' +
-        '<p class="small-print" style="margin:0">We\'ll call or email you to confirm weights, total and delivery time.</p></form>';
+        '<p class="small-print" style="margin:0">We\'ll call or email you to confirm your order and delivery slot.</p></form>';
 
       var waForm = $("#wa-form");
       var buildOrder = function () {
@@ -293,7 +293,7 @@
         var msg = "Hello Sri Seafood! New order:\n\n" + o.lines +
           "\n\nEstimated subtotal: " + money(sub) +
           "\nName: " + o.name + "\nPostcode: " + o.postcode + "\nPreferred delivery: " + o.slot +
-          "\n\nPlease confirm the final weight, total and delivery time. Thank you!";
+          "\n\nPlease confirm my order and delivery slot. Thank you!";
         window.open(waLink(msg), "_blank", "noopener");
       });
 
@@ -315,7 +315,7 @@
           .then(function (r) { if (!r.ok) throw new Error(r.status); })
           .then(function () {
             Basket.items = []; Basket.save();
-            $("#drawer-body").innerHTML = '<div class="drawer-empty"><p><b style="color:var(--ink);font-family:var(--f-display);font-size:1.4rem">Thank you — order received</b><br>We\'ll be in touch shortly to confirm weights, total and your delivery slot.</p><a class="btn btn--primary" href="shop.html">Back to the shop</a></div>';
+            $("#drawer-body").innerHTML = '<div class="drawer-empty"><p><b style="color:var(--ink);font-family:var(--f-display);font-size:1.4rem">Thank you — order received</b><br>We\'ll be in touch shortly to confirm your order and delivery slot.</p><a class="btn btn--primary" href="shop.html">Back to the shop</a></div>';
           })
           .catch(function () {
             btn.disabled = false; btn.textContent = "Send order";
@@ -363,6 +363,19 @@
     toastEl.classList.add("is-show");
     clearTimeout(toastTimer); toastTimer = setTimeout(function () { toastEl.classList.remove("is-show"); }, 3800);
   }
+
+  /* ---------- Homepage hero: a random fish from the collection on each visit ---------- */
+  $$("[data-hero-random]").forEach(function (img) {
+    var pool = PRODUCTS.filter(function (p) { return p.inStock && p.hero !== false && p.image && p.image.indexOf("assets/") === 0; });
+    var show = function () { img.classList.add("is-ready"); };
+    if (!pool.length) { show(); return; }
+    var p = pool[Math.floor(Math.random() * pool.length)];
+    img.onload = show; img.onerror = function () { img.onerror = null; img.src = "assets/img/hero-salmon.jpg"; };
+    img.alt = "Fresh " + p.name + " from Sri Seafood";
+    img.src = p.image;
+    if (img.complete && img.naturalWidth) show();
+    setTimeout(show, 2500);   /* never leave the space empty */
+  });
 
   /* ---------- Next drop ---------- */
   $$("[data-next-drop]").forEach(function (el) { el.textContent = fmtDay(nextDropDates(1)[0]); });

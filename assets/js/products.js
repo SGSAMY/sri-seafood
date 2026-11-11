@@ -12,6 +12,8 @@
    inStock   → false shows "Sold out" and blocks ordering
    aliases   → old web addresses that should open this product
    image     → photo path in assets/img/products/ ("" shows an illustration).
+   hero      → false keeps this photo out of the random homepage picture
+               (still shown in the shop). Leave it out to include the photo.
    ========================================================================== */
 (function (root, factory) {
   var data = factory();
@@ -45,7 +47,7 @@
       short: "Rich, oily and meaty — made for the grill or a coastal curry.",
       description: "Premium oily mackerel with a deep, rich flavour and meaty texture. Excellent grilled, fried, or adding heartiness to coastal curries." },
 
-    { id: "anchovy", name: "Anchovy", category: "fish", unit: "kg", inStock: true, featured: true,
+    { id: "anchovy", hero: false, name: "Anchovy", category: "fish", unit: "kg", inStock: true, featured: true,
       prices: { "Cleaned": 19.88 }, image: "assets/img/products/anchovy.jpg",
       short: "Small, oily and intensely savoury. Cleaned and ready to cook.",
       description: "Small, oily and intensely savoury. Our cleaned anchovies (nethili) are perfect for frying, grilling, or adding deep umami to pasta, pizzas and salads." },
@@ -62,12 +64,12 @@
       short: "Firm, flavourful black pomfret — superb fried or in curry.",
       description: "Black pomfret with firm, flavourful flesh that holds its shape beautifully. Superb shallow-fried, grilled or simmered in a rich curry." },
 
-    { id: "pomfret-silver", name: "Pomfret – Silver", category: "fish", unit: "kg", inStock: true,
+    { id: "pomfret-silver", hero: false, name: "Pomfret – Silver", category: "fish", unit: "kg", inStock: true,
       prices: { "Whole": 32.93, "Cleaned": 33.93, "Steak": 34.93 }, image: "assets/img/products/pomfret-silver.jpg",
       short: "The prized silver pomfret — delicate, buttery and fine.",
       description: "The prized silver pomfret, with delicate, buttery white flesh and very few bones. A special-occasion fish for steaming, tawa fry or grilling." },
 
-    { id: "pomfret-gold", name: "Pomfret – Gold", category: "fish", unit: "kg", inStock: true, aliases: ["silver-promfret"],
+    { id: "pomfret-gold", hero: false, name: "Pomfret – Gold", category: "fish", unit: "kg", inStock: true, aliases: ["silver-promfret"],
       prices: { "Whole": 14.95, "Cleaned": 15.95, "Steak": 16.95 }, image: "assets/img/products/pomfret-gold.jpg",
       short: "Delicate flavour, tender texture — an everyday classic.",
       description: "Golden pomfret, carefully selected for its delicate flavour and tender texture. Ideal for steaming, grilling or Asian-style cooking." },
@@ -87,12 +89,12 @@
       short: "Delicate, flaky white flesh with a clean taste.",
       description: "Exquisite sea bass with delicate, flaky white flesh and a mild, clean profile. Sublime grilled, baked or pan-fried." },
 
-    { id: "lady-fish", name: "Lady Fish", category: "fish", unit: "kg", inStock: true,
+    { id: "lady-fish", hero: false, name: "Lady Fish", category: "fish", unit: "kg", inStock: true,
       prices: { "Whole": 20.86, "Cleaned": 21.86 }, image: "assets/img/products/lady-fish.jpg",
       short: "Mild and delicate with a white, flaky texture.",
       description: "Delicate, mild-flavoured lady fish, prized for its white, flaky texture. A premium choice for light frying or traditional steamed preparations." },
 
-    { id: "salmon-fish", name: "Salmon", category: "fish", unit: "kg", inStock: true,
+    { id: "salmon-fish", hero: false, name: "Salmon", category: "fish", unit: "kg", inStock: true,
       prices: { "Cleaned": 19.92, "Steak": 21.96 }, image: "assets/img/products/salmon.jpg",
       short: "Whole salmon, cleaned or cut into steaks.",
       description: "Whole salmon, cleaned or cut into steaks. Rich and buttery — wonderful baked, grilled or in curry." },
@@ -117,7 +119,7 @@
       short: "Firm, sweet reef fish — great whole or in curry.",
       description: "Emperor fish with firm, sweet white flesh. Lovely roasted or grilled whole, or cut for a rich, spiced curry." },
 
-    { id: "trevally", name: "Trevally", category: "fish", unit: "kg", inStock: true,
+    { id: "trevally", hero: false, name: "Trevally", category: "fish", unit: "kg", inStock: true,
       prices: { "Whole": 17.85, "Cleaned": 18.92, "Steak": 21.47 }, image: "assets/img/products/trevally.jpg",
       short: "Meaty and full-flavoured. A curry and fry essential.",
       description: "Trevally (paarai) with a meaty texture and full flavour that holds up to bold spices — superb fried or in curry." },
@@ -148,7 +150,7 @@
       short: "Purely sweet, tender meat for curries and feasts.",
       description: "Outstanding blue crab with purely sweet, tender meat. A refined pick for steaming or hearty curries — a stunning centrepiece for a coastal dinner." },
 
-    { id: "lobster", name: "Lobster", category: "shellfish", unit: "kg", inStock: true,
+    { id: "lobster", hero: false, name: "Lobster", category: "shellfish", unit: "kg", inStock: true,
       prices: { "Whole": 29.93 }, image: "assets/img/products/lobster.jpg",
       short: "Sweet, tender meat for a special occasion.",
       description: "Luxurious lobster with sweet, tender meat and a rich flavour. A decadent choice for steaming, grilling, or elevating any special-occasion menu." }
