@@ -401,8 +401,8 @@ a.c-card:hover { border-color: var(--gold); transform: translateX(4px); }
 .drawer.is-open { transform: none; }
 .drawer-head { display: flex; justify-content: space-between; align-items: center; padding: 22px 24px; border-bottom: 1px solid var(--line); }
 .drawer-head h2 { font-size: 1.6rem; margin: 0; }
-.drawer-body { flex: 1; overflow-y: auto; padding: 8px 24px; }
-.drawer-foot { border-top: 1px solid var(--line); padding: 20px 24px 24px; background: var(--cream); }
+.drawer-body { flex: 1 1 auto; min-height: 120px; overflow-y: auto; padding: 8px 24px; }
+.drawer-foot { flex: 0 1 auto; overflow-y: auto; border-top: 1px solid var(--line); padding: 20px 24px 24px; background: var(--cream); }
 .free-bar { margin: 16px 0 4px; font-size: .86rem; color: var(--muted); }
 .free-bar b { color: var(--ink); }
 .bar { height: 6px; background: var(--sand); border-radius: 99px; overflow: hidden; margin-top: 8px; }
@@ -427,6 +427,9 @@ a.c-card:hover { border-color: var(--gold); transform: translateX(4px); }
 .drawer-empty svg { width: 120px; margin: 0 auto 16px; color: var(--sand); }
 .checkout-form { display: grid; gap: 10px; margin-bottom: 14px; }
 .checkout-form .input, .checkout-form .select { padding: 11px 14px; font-size: .9rem; background: #fff; }
+.link-btn { display: block; margin: 12px auto 0; font-size: .85rem; font-weight: 700; color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.link-btn:hover { color: var(--gold); }
+.alt-form { margin: 14px 0 0; padding-top: 14px; border-top: 1px solid var(--line); }
 .small-print { font-size: .78rem; color: var(--muted); text-align: center; margin: 10px 0 0; }
 
 /* Toast */

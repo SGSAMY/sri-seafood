@@ -157,6 +157,12 @@
     </ul>
   </div>
 </div></section>
+
+<!-- Hidden copy of the basket's "send by email" order form, so Netlify Forms can detect it -->
+<form name="order" data-netlify="true" netlify-honeypot="company" hidden>
+  <input name="name"><input name="postcode"><input name="phone"><input name="email">
+  <input name="delivery"><input name="subtotal"><textarea name="order"></textarea><input name="company">
+</form>
 </main>
 <footer class="site-footer">
   <div class="wrap">

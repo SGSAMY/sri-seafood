@@ -268,16 +268,53 @@
         '<input class="input" name="postcode" placeholder="Delivery postcode" autocomplete="postal-code" required>' +
         '<select class="select" name="slot" aria-label="Preferred delivery">' + slotOptions() + "<option>Next available slot</option></select></form>" +
         '<button class="btn btn--wa btn--block" form="wa-form" type="submit">' + I.wa + " Send order on WhatsApp</button>" +
-        '<p class="small-print">No payment now — we\'ll confirm weights, total and delivery time on WhatsApp.</p>';
-      $("#wa-form").addEventListener("submit", function (e) {
-        e.preventDefault();
-        var f = e.target;
+        '<p class="small-print">No payment now — we\'ll confirm weights, total and delivery time on WhatsApp.</p>' +
+        '<button type="button" class="link-btn" id="alt-toggle" aria-expanded="false">No WhatsApp? Send your order by email instead</button>' +
+        '<form class="checkout-form alt-form" id="alt-form" hidden>' +
+        '<input class="input" type="tel" name="phone" placeholder="Phone number" autocomplete="tel" required>' +
+        '<input class="input" type="email" name="email" placeholder="Email address" autocomplete="email" required>' +
+        '<button class="btn btn--primary btn--block" type="submit">Send order</button>' +
+        '<p class="small-print" style="margin:0">We\'ll call or email you to confirm weights, total and delivery time.</p></form>';
+
+      var waForm = $("#wa-form");
+      var buildOrder = function () {
         var lines = Basket.items.map(function (i) { var p = byId(i.id); return "• " + p.name + (i.cut ? " — " + i.cut : "") + " × " + fmtQty(i.qty, p) + " (" + money(lineTotal(p, i.cut, i.qty)) + ")" + (i.note ? "\n   Note: " + i.note : ""); });
-        var msg = "Hello Sri Seafood! New order 🐟\n\n" + lines.join("\n") +
+        return { lines: lines.join("\n"), name: waForm.name.value.trim(), postcode: waForm.postcode.value.trim().toUpperCase(), slot: waForm.slot.value };
+      };
+      waForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var o = buildOrder();
+        var msg = "Hello Sri Seafood! New order:\n\n" + o.lines +
           "\n\nEstimated subtotal: " + money(sub) +
-          "\nName: " + f.name.value.trim() + "\nPostcode: " + f.postcode.value.trim().toUpperCase() + "\nPreferred delivery: " + f.slot.value +
+          "\nName: " + o.name + "\nPostcode: " + o.postcode + "\nPreferred delivery: " + o.slot +
           "\n\nPlease confirm the final weight, total and delivery time. Thank you!";
         window.open(waLink(msg), "_blank", "noopener");
+      });
+
+      /* Backup for customers without WhatsApp: sends the order through Netlify Forms ("order") */
+      $("#alt-toggle").addEventListener("click", function (e) {
+        var f = $("#alt-form"); f.hidden = !f.hidden; e.currentTarget.setAttribute("aria-expanded", !f.hidden);
+        if (!f.hidden) f.phone.focus();
+      });
+      $("#alt-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        if (!waForm.reportValidity()) return;
+        var f = e.target, btn = $("button[type=submit]", f), o = buildOrder();
+        btn.disabled = true; btn.textContent = "Sending…";
+        var data = new URLSearchParams({
+          "form-name": "order", name: o.name, postcode: o.postcode, phone: f.phone.value.trim(), email: f.email.value.trim(),
+          delivery: o.slot, order: o.lines, subtotal: money(sub)
+        });
+        fetch("/", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: data.toString() })
+          .then(function (r) { if (!r.ok) throw new Error(r.status); })
+          .then(function () {
+            Basket.items = []; Basket.save();
+            $("#drawer-body").innerHTML = '<div class="drawer-empty"><p><b style="color:var(--ink);font-family:var(--f-display);font-size:1.4rem">Thank you — order received</b><br>We\'ll be in touch shortly to confirm weights, total and your delivery slot.</p><a class="btn btn--primary" href="shop.html">Back to the shop</a></div>';
+          })
+          .catch(function () {
+            btn.disabled = false; btn.textContent = "Send order";
+            toast("Sorry, that didn't send. Please call us on " + B.phone + ".");
+          });
       });
     } else {
       foot.innerHTML =
