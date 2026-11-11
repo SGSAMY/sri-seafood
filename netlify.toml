@@ -1,0 +1,46 @@
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+  included_files = ["assets/js/products.js", "assets/js/config.js"]
+
+# ---- Keep old Wix links working (Google results, WhatsApp shares, QR codes) ----
+[[redirects]]
+  from = "/about-us"
+  to = "/about.html"
+  status = 301
+[[redirects]]
+  from = "/contact-us"
+  to = "/contact.html"
+  status = 301
+[[redirects]]
+  from = "/category/all-products"
+  to = "/shop.html"
+  status = 301
+[[redirects]]
+  from = "/category/fresh-seafood"
+  to = "/shop.html?cat=fish"
+  status = 301
+[[redirects]]
+  from = "/category/seafood-alternatives"
+  to = "/shop.html?cat=shellfish"
+  status = 301
+[[redirects]]
+  from = "/product-page/:slug"
+  to = "/product.html?id=:slug"
+  status = 301
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "SAMEORIGIN"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
